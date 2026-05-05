@@ -3,7 +3,7 @@ import FieldRenderer from "./FieldRenderer";
 import config from "../../config.json";
 import { AppContext } from "../../context/AppContext";
 import { createRecord } from "../../services/dynamicApi";
-import CSVUploader from "../csv/CSVUploader";
+import CSVUploader from "../csv/csvuploader";
 import { useLocalization } from "../../hooks/useLocalization";
 
 export default function DynamicForm({ entity, lang }) {
