@@ -1,0 +1,17 @@
+{
+  "entities": [
+    {
+      "name": "students",
+      "fields": [
+        { "name": "name", "type": "text" },
+        { "name": "age", "type": "number" }
+      ]
+    }
+  ],
+  "ui": {
+    "pages": [
+      { "type": "form", "entity": "students" },
+      { "type": "table", "entity": "students" }
+    ]
+  }
+}
