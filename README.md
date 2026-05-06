@@ -4,13 +4,8 @@ A dynamic AI-powered application builder that generates forms, tables, APIs, aut
 
 ## 🌐 Live Demo
 
-### Frontend
-
-🔗 [https://ai-app-generator-yw6q.vercel.app](https://ai-app-generator-yw6q.vercel.app)
-
-### Backend
-
-🔗 [https://ai-app-generator-1-wzxt.onrender.com](https://ai-app-generator-1-wzxt.onrender.com)
+### Live Demo Link
+🔗 https://ai-app-generator-qczr.vercel.app
 
 ### Project Demo Video
 
