@@ -1,90 +1,69 @@
-import { useContext, useEffect, useState } from "react";
-import config from "../../config.json";
+ import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-import { getRecords } from "../../services/dynamicApi";
+import { useConfig } from "../../hooks/useConfig";
 
 export default function DynamicTable({ entity }) {
-  const entityConfig = config.entities.find(e => e.name === entity);
+  const { config } = useConfig();
+  const { appData } = useContext(AppContext);
 
-  const { data } = useContext(AppContext);
+  if (!config) return <div>Loading...</div>;
 
-  const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // ✅ find page config
+  const entityConfig = config.ui?.pages?.find(
+    (p) => p.entity === entity
+  );
 
-  // ❗ safety check
   if (!entityConfig) {
     return <div>Invalid entity: {entity}</div>;
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError("");
+  const fields =
+    entityConfig.sections?.[0]?.fields || [];
 
-      try {
-        // ✅ backend call
-        const res = await getRecords(entity);
-
-        // backend format: { entity, data }
-        const formatted = res.map(item => item.data);
-
-        setTableData(formatted);
-      } catch (err) {
-        console.error(err);
-
-        // ❗ fallback to local state
-        setTableData(data[entity] || []);
-        setError("Using local data (API failed)");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [entity, data]);
+  const records = appData?.[entity] || [];
 
   return (
-    <div>
-      <h2>{entity} Table</h2>
+    <div style={{ marginTop: "20px" }}>
+      <table
+        border="1"
+        cellPadding="10"
+        style={{
+          borderCollapse: "collapse",
+          width: "100%",
+        }}
+      >
+        <thead>
+          <tr>
+            {fields.map((field) => (
+              <th key={field.name}>
+                {typeof field.label === "object"
+                  ? field.label.en
+                  : field.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
 
-      {/* 🔄 loading */}
-      {loading && <p>Loading...</p>}
-
-      {/* ❗ error */}
-      {error && <p style={{ color: "orange" }}>{error}</p>}
-
-      {!loading && (
-        <table border="1">
-          <thead>
-            <tr>
-              {entityConfig.fields.map(field => (
-                <th key={field.name}>{field.name}</th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {tableData.length === 0 ? (
-              <tr>
-                <td colSpan={entityConfig.fields.length}>
-                  No data available
-                </td>
+        <tbody>
+          {records.length > 0 ? (
+            records.map((record, index) => (
+              <tr key={index}>
+                {fields.map((field) => (
+                  <td key={field.name}>
+                    {record[field.name]}
+                  </td>
+                ))}
               </tr>
-            ) : (
-              tableData.map((row, i) => (
-                <tr key={i}>
-                  {entityConfig.fields.map(field => (
-                    <td key={field.name}>
-                      {row[field.name] || "-"}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={fields.length}>
+                No data found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

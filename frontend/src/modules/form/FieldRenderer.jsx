@@ -1,29 +1,34 @@
- import { useLocalization } from "../../hooks/useLocalization";
-
-export default function FieldRenderer({ field, value, onChange, lang }) {
-  const labels = useLocalization(lang);
-
-  const label = labels[field.name] || field.name;
+ export default function FieldRenderer({
+  field,
+  value,
+  onChange,
+  lang,
+}) {
+  const label =
+    typeof field.label === "object"
+      ? field.label[lang]
+      : field.label;
 
   switch (field.type) {
     case "text":
+    case "email":
       return (
-        <input
-          type="text"
-          placeholder={label}
-          value={value}
-          onChange={(e) => onChange(field.name, e.target.value)}
-        />
-      );
-
-    case "number":
-      return (
-        <input
-          type="number"
-          placeholder={label}
-          value={value}
-          onChange={(e) => onChange(field.name, e.target.value)}
-        />
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            type={field.type}
+            placeholder={label}
+            value={value}
+            onChange={(e) =>
+              onChange(field.name, e.target.value)
+            }
+            style={{
+              padding: "10px",
+              width: "220px",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+            }}
+          />
+        </div>
       );
 
     default:

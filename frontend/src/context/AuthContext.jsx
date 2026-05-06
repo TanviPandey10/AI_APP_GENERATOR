@@ -1,24 +1,18 @@
- import { createContext, useState, useEffect } from 'react';
+ import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check if user is already logged in on page load
-  useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) setUser(JSON.parse(savedUser));
-  }, []);
-
+  // ✅ LOGIN FUNCTION
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
   };
 
+  // ✅ LOGOUT (optional but useful)
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
   };
 
   return (
@@ -26,4 +20,9 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+// ✅ CUSTOM HOOK
+export const useAuth = () => {
+  return useContext(AuthContext);
 };

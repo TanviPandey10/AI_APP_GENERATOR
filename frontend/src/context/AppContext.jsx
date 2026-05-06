@@ -1,19 +1,24 @@
- import { createContext, useState } from "react";
+  import { createContext, useState } from "react";
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [data, setData] = useState({});
+  const [appData, setAppData] = useState({});
 
   const addData = (entity, record) => {
-    setData(prev => ({
+    setAppData((prev) => ({
       ...prev,
-      [entity]: [...(prev[entity] || []), record]
+      [entity]: [...(prev[entity] || []), record],
     }));
   };
 
   return (
-    <AppContext.Provider value={{ data, addData }}>
+    <AppContext.Provider
+      value={{
+        appData,
+        addData,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

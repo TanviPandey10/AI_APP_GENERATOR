@@ -1,0 +1,14 @@
+ {
+  "auth": {
+    "enabled": true
+  },
+  "entities": [
+    {
+      "name": "students",
+      "fields": [
+        { "name": "name", "type": "text", "required": true },
+        { "name": "age", "type": "number", "required": true }
+      ]
+    }
+  ]
+}
